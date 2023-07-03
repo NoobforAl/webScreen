@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 headless_chrome = "1.0.5"
 clap = { version = "4.0", features = ["derive"] }
+log = "0.4.19"
+env_logger = "0.10.0"
