@@ -7,4 +7,4 @@ WORKDIR /app
 
 COPY . /app/
 
-CMD [ "cargo", "run" ]
+CMD [ "cargo", "run", "--", "--debug", "--run-server" ]
