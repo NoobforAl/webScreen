@@ -1,16 +1,14 @@
 use env_logger;
 pub use log::{debug, error, info, warn};
 
-pub fn init_logger(debug: bool) {
-    if debug {
-        env_logger::builder()
-            .filter_level(log::LevelFilter::Debug)
-            .init();
+pub fn init_logger(debug: bool, silent: bool) {
+    let mut level = log::LevelFilter::Info;
 
-        debug!("debug mode is ON!");
-    } else {
-        env_logger::builder()
-            .filter_level(log::LevelFilter::Info)
-            .init();
+    if debug {
+        level = log::LevelFilter::Debug;
+    } else if silent {
+        level = log::LevelFilter::Off;
     }
+
+    env_logger::builder().filter_level(level).init();
 }
