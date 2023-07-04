@@ -1,33 +1,64 @@
 use clap::Parser;
+use std::error::Error;
+
+#[path = "../core/webscreen.rs"]
+mod web_screen;
+
+#[path = "../logger/logger.rs"]
+mod logger;
+
+#[path = "../api/api.rs"]
+mod api;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-pub struct Cli {
+struct Cli {
     /// send url website
-    #[arg(short, long)]
-    pub url: String,
+    #[arg(short, long, default_value = "")]
+    url: String,
+
+    /// Run silent Mode App
+    #[arg(long, default_value_t = false)]
+    silent: bool,
 
     /// Run Debug Mode App
     #[arg(long, default_value_t = false)]
-    pub debug: bool,
+    debug: bool,
 
     /// Set Timeout for requests
     #[arg(short, long, default_value_t = 10)]
-    pub timeout: u64,
+    timeout: u64,
 
     // select format png or jpeg
     #[arg(short, long, default_value = "png")]
-    pub format: String,
+    format: String,
 
     /// quality of image 10 - 100
     #[arg(short, long, default_value_t = 100)]
-    pub quality: u32,
+    quality: u32,
 
     /// run tools server
     #[arg(short, long, default_value_t = false)]
-    pub run_server: bool,
+    run_server: bool,
 
     /// port by default is 8080
     #[arg(short, long, default_value_t = 8080)]
-    pub port: u16,
+    port: u16,
+}
+
+fn make_file_name(format: &str) -> String {
+    return format!("./screenShot.{format}");
+}
+
+pub fn cmd() -> Result<(), Box<dyn Error>> {
+    let args = Cli::parse();
+    logger::init_logger(args.debug, args.silent);
+
+    if args.run_server {
+        let _ = api::run(args.port);
+    }
+
+    let res = web_screen::web_screen(&args.url, args.timeout, &args.format, args.quality)?;
+    web_screen::save_img(make_file_name(&args.format).as_str(), res)?;
+    Ok(())
 }
