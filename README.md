@@ -2,6 +2,11 @@
 
 very simple web screen shot with Rust.
 
+## How Run Docker
+
+> docker pull noobforal/webscreen  
+> docker run -d -p 8080:8080 noobforal/webscreen
+
 ## Help Cli
 
 ```txt
