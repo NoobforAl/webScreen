@@ -4,9 +4,6 @@ use serde::{Deserialize, Serialize};
 #[path = "../core/webscreen.rs"]
 mod web_screen;
 
-#[path = "../logger/logger.rs"]
-mod logger;
-
 #[derive(Serialize, Deserialize, Debug)]
 struct Info {
     url: String,
@@ -40,7 +37,7 @@ async fn screenshot(q: web::Query<Info>) -> impl Responder {
     let content_type = match q.format.as_str() {
         "png" => "image/png",
         "jpeg" => "image/jpeg",
-        _ => "application/octet-stream", // default content type
+        _ => "image/png",
     };
 
     match res {
@@ -52,7 +49,7 @@ async fn screenshot(q: web::Query<Info>) -> impl Responder {
 #[actix_web::main]
 pub async fn run(port: u16) -> std::io::Result<()> {
     HttpServer::new(|| App::new().service(screenshot))
-        .bind(("127.0.0.1", port))?
+        .bind(("0.0.0.0", port))?
         .run()
         .await
 }

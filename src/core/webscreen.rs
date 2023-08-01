@@ -8,30 +8,17 @@ use protocol::cdp::Page;
 
 use Page::CaptureScreenshotFormatOption;
 
-#[path = "../logger/logger.rs"]
-mod logger;
-
-fn getformate(format: &str) -> CaptureScreenshotFormatOption {
-    logger::debug!("choose format file.");
-    match format {
-        "png" => return CaptureScreenshotFormatOption::Png,
-        "jpeg" => return CaptureScreenshotFormatOption::Jpeg,
-        _ => return CaptureScreenshotFormatOption::Png,
-    }
-}
-
 pub fn web_screen(
     url: &str,
     timeout: u64,
     format: &str,
     quality: u32,
 ) -> Result<Vec<u8>, Box<dyn Error>> {
-    logger::debug!("create browser and new tab");
-
+    log::debug!("create browser and new tab");
     let browser = Browser::default()?;
     let tab = browser.new_tab()?;
 
-    logger::info!("take screenshot with time out {}, URL: {}", timeout, url);
+    log::info!("take screenshot with time out {}, URL: {}", timeout, url);
 
     let jpeg_data = tab
         .navigate_to(url)?
@@ -39,14 +26,22 @@ pub fn web_screen(
         .wait_until_navigated()?
         .capture_screenshot(getformate(format), Some(quality), None, true)?;
 
-    logger::debug!("Done screenshot and close browser");
-    let _ = browser.clone();
-    logger::info!("web screenshot done");
+    log::info!("web screenshot done");
     Ok(jpeg_data)
 }
 
+fn getformate(format: &str) -> CaptureScreenshotFormatOption {
+    log::debug!("choose format file.");
+    match format {
+        "png" => return CaptureScreenshotFormatOption::Png,
+        "jpeg" => return CaptureScreenshotFormatOption::Jpeg,
+        _ => return CaptureScreenshotFormatOption::Png,
+    }
+}
+
+#[allow(dead_code)]
 pub fn save_img(path_file: &str, data: Vec<u8>) -> Result<(), Box<dyn Error>> {
-    logger::debug!("save file :{}", path_file);
+    log::debug!("save file :{}", path_file);
     fs::write(path_file, data)?;
     Ok(())
 }
