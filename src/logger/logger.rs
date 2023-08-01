@@ -1,5 +1,4 @@
 use env_logger;
-pub use log::{debug, error, info, warn};
 
 pub fn init_logger(debug: bool, silent: bool) {
     let mut level = log::LevelFilter::Info;
