@@ -22,6 +22,15 @@ Options:
 
 Example:
 
-> webscreen -u https://example.com/
+```webscreen -u https://example.com/```
 
 And screen saved screenShot.png/jpeg.
+
+Note: If you run server mode request to this endpoint:
+
+```http://127.0.0.1:8080/?url=http://google.com&quality=100&format=PNG&timeout=10```
+
+> url : query string  
+> quality : query int  
+> format : query (PNG or jpeg)  
+> timeout : query int  
