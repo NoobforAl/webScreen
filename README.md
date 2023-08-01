@@ -2,6 +2,13 @@
 
 very simple web screen shot with Rust.
 
+## How Download
+
+Go to [release](https://github.com/NoobforAl/webScreen/releases) page and download binary file.  
+Or clone project and compile it.
+
+Note: for run this browser need chrome browser.
+
 ## How Run Docker
 
 > docker pull noobforal/webscreen  
