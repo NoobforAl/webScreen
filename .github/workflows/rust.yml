@@ -1,22 +1,32 @@
-name: Rust
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
+    name: Build Rust Program
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    #- name: Run tests
-    #  run: cargo test --verbose
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build Rust Program
+        run: |
+          cargo build --release
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: compiled-program
+          path: target/release/webscreen
