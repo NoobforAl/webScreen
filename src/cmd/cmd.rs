@@ -10,6 +10,22 @@ mod logger;
 #[path = "../api/api.rs"]
 mod api;
 
+const USAGE: &str = r#"
+Usage: webscreen [OPTIONS]
+    
+Options:
+    -u, --url <URL>          send url website [default: ]
+        --silent             Run silent Mode App
+        --debug              Run Debug Mode App
+    -t, --timeout <TIMEOUT>  Set Timeout for requests [default: 10]
+    -f, --format <FORMAT>    [default: png]
+    -q, --quality <QUALITY>  quality of image 10 - 100 [default: 100]
+    -r, --run-server         run tools server
+    -p, --port <PORT>        port by default is 8080 [default: 8080]
+    -h, --help               Print help
+    -V, --version            Print version
+"#;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
@@ -52,6 +68,11 @@ fn make_file_name(format: &str) -> String {
 
 pub fn cmd() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
+    if !args.run_server && args.url == "" {
+        println!("{}", USAGE);
+        return Ok(());
+    }
+
     logger::init_logger(args.debug, args.silent);
 
     if args.run_server {
