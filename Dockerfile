@@ -1,10 +1,15 @@
-FROM rust:1.70.0-alpine
-
-RUN apk update
-RUN apk add --no-cache chromium
+FROM rust:latest
 
 WORKDIR /app
 
-COPY . /app/
+RUN apt update
+RUN apt install -y chromium
+RUN apt upgrade -y
+
+COPY . /app
+
+RUN cargo build --release
+
+EXPOSE 8080
 
 CMD [ "cargo", "run", "--", "--debug", "--run-server" ]
