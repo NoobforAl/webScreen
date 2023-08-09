@@ -4,6 +4,7 @@ use std::time::Duration;
 
 use headless_chrome::protocol;
 use headless_chrome::Browser;
+use headless_chrome::LaunchOptionsBuilder;
 use protocol::cdp::Page;
 
 use Page::CaptureScreenshotFormatOption;
@@ -14,8 +15,14 @@ pub fn web_screen(
     format: &str,
     quality: u32,
 ) -> Result<Vec<u8>, Box<dyn Error>> {
+    let options = LaunchOptionsBuilder::default()
+        .headless(true)
+        .sandbox(false)
+        .build()
+        .unwrap();
+
     log::debug!("create browser and new tab");
-    let browser = Browser::default()?;
+    let browser = Browser::new(options)?;
     let tab = browser.new_tab()?;
 
     log::info!("take screenshot with time out {}, URL: {}", timeout, url);
